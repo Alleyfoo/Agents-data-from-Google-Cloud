@@ -70,6 +70,21 @@ Why this is more than “just read Excel”:
 - Data cleaning: `runtime/data_janitor.py` — `clean_value`, `clean_series` for stripping whitespace, normalizing numeric-ish strings, and handling nulls before writing `clean.csv`.
 - Schema + evidence: `schema_spec.json` and `evidence_packet.json` come from the run; they capture normalized headers, confidence scores, and decisions so you can replay/debug.
 
+### UI → runtime → artifacts (code map)
+
+```
+CLI/TUI/Streamlit
+   │ calls
+   ▼
+runtime.excel_flow.puhemies_run_from_file
+   ├─ _build_header_candidates → header_spec.json
+   ├─ _append_shadow           → shadow.jsonl (event log)
+   ├─ write_human_confirmation → human_confirmation.json (after you pick a header)
+   ├─ puhemies_continue        → re-loads confirmation + cleans data
+   ├─ _infer_dtype/clean_series → schema_spec.json, clean.csv
+   └─ _write_json              → evidence_packet.json, save_manifest.json
+```
+
 ## Agent philosophy (why it works this way)
 
 - Decisions are explicit: the orchestrator asks for human confirmation when header confidence is low, then records that choice in artifacts so runs are reproducible.
