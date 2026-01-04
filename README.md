@@ -37,7 +37,10 @@ Outputs land in `artifacts/<run-id>/`, including `clean.csv`, `schema_spec.json`
 - Local dev: leave `ARTIFACTS_ROOT` unset to default to `./artifacts`; install with `pip install -r demos/requirements-demo.txt`; run `streamlit run demos/streamlit_app.py`.
 - Cloud Storage: set `ARTIFACTS_ROOT=gs://your-bucket/artifacts` and run the CLI or Streamlit apps; artifacts are written via the storage abstraction instead of container paths.
 - Cloud Run: build with the provided `Dockerfile` and deploy with `gcloud run deploy ... --set-env-vars ARTIFACTS_ROOT=gs://your-bucket/artifacts`; the app binds to `$PORT` on `0.0.0.0`.
+- Demo /tmp mode: without GCS, set `ARTIFACTS_ROOT=/tmp/artifacts` and `UPLOADS_DIR=/tmp/uploads`, and keep Cloud Run Max instances = 1 (to avoid runs splitting across instances).
 - Inputs are copied into the artifact store, so resume checks don’t depend on container-local paths.
+- Buildpacks: root `requirements.txt` (points to `demos/requirements-demo.txt`) and `Procfile` start Streamlit correctly for Cloud Run buildpacks.
+- Manual: see `CloudRun_MappingStudio_Manual_v0_2.docx` for a screenshot-driven deploy + usage guide (Console buildpacks flow, header mapping, outputs, troubleshooting).
 
 ## What this demo does
 
